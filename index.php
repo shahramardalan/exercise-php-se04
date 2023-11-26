@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,12 +66,25 @@
             <?php
             include_once("data.php");
             include_once("renderProducts.php");
-            foreach ($products as $product) {
-                echo renderProducts($product["productName"], $product["description"], $product["quantity"], implode(" | ", $product["color"]));
-            }
+
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                echo renderProducts($_POST["productName"], $_POST["description"], $_POST["quantity"], $_POST["color"]);
+                array_push($products, [
+                    "productName" => $_POST["productName"],
+                    "description" => $_POST["description"],
+                    "quantity" => $_POST["quantity"],
+                    "color" => $_POST["color"],
+                ]);
             }
+            foreach ($products as $product) {
+                if (is_array($product["color"])) {
+                    echo renderProducts($product["productName"], $product["description"], $product["quantity"], implode(" | ", $product["color"]));
+                } else {
+                    echo renderProducts($product["productName"], $product["description"], $product["quantity"], $product["color"]);
+                }
+            }
+
+            $_SESSION["products"] = serialize($products);
+
             ?>
         </div>
     </div>
