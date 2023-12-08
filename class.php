@@ -54,5 +54,4 @@ foreach ($mobileList as $mobile) {
 
 
 ?>
-
 </pre>
